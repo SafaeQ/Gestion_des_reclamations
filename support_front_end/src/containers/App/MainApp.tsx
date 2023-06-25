@@ -7,11 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  CalendarOutlined,
-  CommentOutlined,
   DownOutlined,
-  ProjectOutlined,
-  ShoppingOutlined,
   TagsOutlined,
 } from "@ant-design/icons";
 import { ROLE, User } from "../../types";
@@ -37,34 +33,9 @@ const MainApp = () => {
 
   const defaultMenus = [
     {
-      path: "/tickets",
-      name: "Tickets",
+      path: "/complaints",
+      name: "Complaints",
       icon: <TagsOutlined />,
-      roles: [ROLE.TEAMLEADER, ROLE.CHEF, ROLE.TEAMMEMBER],
-    },
-    {
-      path: "/planning",
-      name: "Planning",
-      icon: <CalendarOutlined />,
-      roles: [ROLE.TEAMLEADER, ROLE.CHEF, ROLE.TEAMMEMBER],
-    },
-    {
-      path: "/chats",
-      name: "Messages",
-      icon: <CommentOutlined />,
-      roles: [ROLE.TEAMLEADER, ROLE.CHEF],
-    },
-    {
-      path: "/sponsors",
-      name: "Sponsors",
-      icon: <ShoppingOutlined />,
-      key: <ShoppingOutlined />,
-      roles: [ROLE.CHEF],
-    },
-    {
-      path: "/holiday-management",
-      name: "Holiday Management",
-      icon: <ProjectOutlined />,
       roles: [ROLE.TEAMLEADER, ROLE.CHEF, ROLE.TEAMMEMBER],
     },
   ].filter((item) => item.roles.includes(user?.role as ROLE));

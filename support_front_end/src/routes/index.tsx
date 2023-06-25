@@ -19,17 +19,12 @@ import {
   User,
   USER_STATUS,
 } from "../types";
-import DragDrop from "./pages/Planning/Components/Home";
-
-import Provider from "./pages/Planning/context/planningContext";
 import { Button, Result } from "antd";
 import addNotification from "react-push-notification";
 import { socket } from "../context/socket.provider";
 import { useNotification } from "../util/useNotification";
 import pointBlank from "../sounds/point-blank-589.mp3";
 import ChefProtectedRoute from "../containers/hoc/ChefPrivateRoute";
-import Create from "./pages/Sponsors/Create";
-import Update from "./pages/Sponsors/Update";
 import { transport } from "../util/Api";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
@@ -38,19 +33,7 @@ import inform from "../sounds/youve-been-informed-345.mp3";
 import UpdateComplain from "./pages/Tickets/Complaints/Update";
 
 const Tickets = lazy(async () => await import("./pages/Tickets/Tickets"));
-const Sponsors = lazy(async () => await import("./pages/Sponsors/Sponsors"));
 const ChatApp = lazy(async () => await import("./pages/Chat"));
-const HolidayComponent = lazy(
-  async () => await import("./pages/HolidayManagement/Components/HolidayHome")
-);
-
-const Planning = () => {
-  return (
-    <Provider>
-      <DragDrop />
-    </Provider>
-  );
-};
 
 enum Scoop {
   MEMBER = "member",
@@ -71,36 +54,6 @@ const routes = [
     path: "chats",
     exact: true,
     scope: Scoop.LEADER,
-  },
-  {
-    component: Planning,
-    path: "planning",
-    exact: true,
-    scope: Scoop.MEMBER,
-  },
-  {
-    component: Sponsors,
-    path: "sponsors",
-    exact: true,
-    scope: Scoop.CHEF,
-  },
-  {
-    component: Create,
-    path: "sponsors/create",
-    exact: true,
-    scope: Scoop.CHEF,
-  },
-  {
-    component: Update,
-    path: "sponsors/:id/edit",
-    exact: true,
-    scope: Scoop.CHEF,
-  },
-  {
-    component: HolidayComponent,
-    path: "holiday-management",
-    exact: true,
-    scope: Scoop.MEMBER,
   },
   {
     component: UpdateComplain,
