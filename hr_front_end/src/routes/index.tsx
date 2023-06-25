@@ -17,9 +17,7 @@ import {
   USER_STATUS,
 } from "../types";
 
-import Provider from "./pages/Planning/context/planningContext";
 import { Button, Result } from "antd";
-import DragDropAdmin from "./pages/Planning/Components/HomeAdmin";
 import addNotification from "react-push-notification";
 import { socket } from "../context/socket.provider";
 import { useNotification } from "../util/useNotification";
@@ -29,48 +27,19 @@ import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { BellOutlined } from "@ant-design/icons";
 import inform from "../sounds/youve-been-informed-345.mp3";
-import UpdateRequest from "./pages/HolidayManagement/Components/Update";
 import UpdateUser from "./pages/Users/Update";
 import AdminProtectedRoute from "../containers/hoc/AdminPrivateRoute";
 
-const Tickets = lazy(async () => await import("./pages/Tickets/Tickets"));
-const HolidayDate = lazy(
-  async () => await import("./pages/HolidayManagement/Components/HolidaysDates")
-);
+const Complaint = lazy(async () => await import("./pages/Tickets/Home"));
 const Users = lazy(async () => await import("./pages/Users/Users"));
 const CreateUser = lazy(async () => await import("./pages/Users/Create"));
-const HolidayComponent = lazy(
-  async () => await import("./pages/HolidayManagement/Components/HrHoliday")
-);
-const Planning = () => {
-  return <Provider>{<DragDropAdmin />}</Provider>;
-};
+
 
 // define application routes
 const routes = [
   {
-    component: Tickets,
-    path: "tickets",
-    exact: true,
-  },
-  {
-    component: Planning,
-    path: "planning",
-    exact: true,
-  },
-  {
-    component: HolidayComponent,
-    path: "holiday-management",
-    exact: true,
-  },
-  {
-    component: UpdateRequest,
-    path: "holidays/tech/update/:id",
-    exact: true,
-  },
-  {
-    component: HolidayDate,
-    path: "public-holidays",
+    component: Complaint,
+    path: "complaint",
     exact: true,
   },
   {

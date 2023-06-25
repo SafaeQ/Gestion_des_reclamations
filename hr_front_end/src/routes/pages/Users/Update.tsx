@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { Button, Card, Form, Input, Select, Switch, message } from "antd";
 import { transport } from "../../../util/Api";
 import { LeftOutlined, SaveOutlined, SyncOutlined } from "@ant-design/icons";
-import "../HolidayManagement/style/holidayStyle.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../appRedux/store";
 

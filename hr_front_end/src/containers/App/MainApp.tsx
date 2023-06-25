@@ -37,29 +37,14 @@ const MainApp = () => {
 
   const defaultMenus = [
     {
-      path: "/tickets",
-      name: "Tickets",
+      path: "/complaint",
+      name: "Complaints",
       icon: <TagsOutlined />,
-    },
-    {
-      path: "/planning",
-      name: "Planning",
-      icon: <CalendarOutlined />,
     },
     {
       path: "/users",
       name: "Users",
       icon: <UsergroupAddOutlined />,
-    },
-    {
-      path: "/holiday-management",
-      name: "Holiday Management",
-      icon: <ProjectOutlined />,
-    },
-    {
-      path: "/public-holidays",
-      name: "Public Holidays",
-      icon: <CreditCardOutlined />,
     },
   ];
 
