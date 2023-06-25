@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
+  AuditOutlined,
   DownOutlined,
-  TagsOutlined,
 } from "@ant-design/icons";
 import { ROLE, User } from "../../types";
 import { RootState } from "../../appRedux/store";
@@ -16,7 +16,7 @@ import { transport } from "../../util/Api";
 import { Dropdown, Space } from "antd";
 import { ItemType } from "rc-menu/lib/interface";
 import { setCurrentUser } from "../../appRedux/actions/auth";
-import { AwayButton, ChatItem, TicketItem } from "../../routes/NotifeItem";
+import { AwayButton,  } from "../../routes/NotifeItem";
 
 const MainApp = () => {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const MainApp = () => {
     {
       path: "/complaints",
       name: "Complaints",
-      icon: <TagsOutlined />,
+      icon: <AuditOutlined />,
       roles: [ROLE.TEAMLEADER, ROLE.CHEF, ROLE.TEAMMEMBER],
     },
   ].filter((item) => item.roles.includes(user?.role as ROLE));
@@ -87,13 +87,6 @@ const MainApp = () => {
         actionsRender={() => {
           return [
             <AwayButton key={"away"} />,
-            <TicketItem key={"tags"} />,
-            user?.role !== ROLE.TEAMMEMBER ? (
-              <ChatItem key={"chat"} />
-            ) : undefined,
-            <h4 key={"balance"}>
-              <span>Holiday Balance is</span> {user?.solde}
-            </h4>,
           ];
         }}
         menuFooterRender={(props: any) => {
