@@ -20,7 +20,7 @@ import { transport } from "../../util/Api";
 import { Dropdown, Space } from "antd";
 import { ItemType } from "rc-menu/lib/interface";
 import { setCurrentUser } from "../../appRedux/actions/auth";
-import { AwayButton, ComplaintItem, TicketItem } from "../../routes/NotifeItem";
+import { AwayButton, ComplaintItem } from "../../routes/NotifeItem";
 
 const MainApp = () => {
   const dispatch = useDispatch();
@@ -96,10 +96,6 @@ const MainApp = () => {
           return [
             <AwayButton key={"away"} />,
             <ComplaintItem key={"complaint"} />,
-            <TicketItem key={"tags"} />,
-            <h4 key={"balance"}>
-              <span>Holiday Balance is</span> {user?.solde}
-            </h4>,
           ];
         }}
         menuFooterRender={(props: any) => {
