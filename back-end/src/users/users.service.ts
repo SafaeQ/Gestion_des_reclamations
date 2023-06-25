@@ -74,14 +74,7 @@ export class UsersService {
         'activity',
         'solde',
       ],
-      relations: [
-        'entity',
-        'team',
-        'departements',
-        'restrictions',
-        'restrictions.departement',
-        'holidays',
-      ],
+      relations: ['entity', 'team', 'departements'],
     });
   }
 
@@ -110,14 +103,7 @@ export class UsersService {
         'access_team',
         'activity',
       ],
-      relations: [
-        'entity',
-        'team',
-        'departements',
-        'restrictions',
-        'restrictions.departement',
-        'holidays',
-      ],
+      relations: ['entity', 'team', 'departements'],
     });
   }
 
@@ -145,14 +131,7 @@ export class UsersService {
         'access_entity_hr',
         'access_team',
       ],
-      relations: [
-        'entity',
-        'team',
-        'departements',
-        'restrictions',
-        'restrictions.departement',
-        'holidays',
-      ],
+      relations: ['entity', 'team', 'departements'],
     });
   }
 
@@ -171,14 +150,7 @@ export class UsersService {
         user_type: META_TYPE.SUPPORT,
         status: 'active',
       },
-      relations: [
-        'entity',
-        'team',
-        'departements',
-        'restrictions',
-        'restrictions.departement',
-        'holidays',
-      ],
+      relations: ['entity', 'team', 'departements'],
       select: [
         'id',
         'name',
@@ -212,14 +184,7 @@ export class UsersService {
         user_type: META_TYPE.SUPPORT,
         status: 'active',
       },
-      relations: [
-        'entity',
-        'team',
-        'departements',
-        'restrictions',
-        'restrictions.departement',
-        'holidays',
-      ],
+      relations: ['entity', 'team', 'departements'],
       select: [
         'id',
         'name',
@@ -254,14 +219,7 @@ export class UsersService {
         user_type: META_TYPE.PROD,
         status: 'active',
       },
-      relations: [
-        'entity',
-        'team',
-        'departements',
-        'restrictions',
-        'restrictions.departement',
-        'holidays',
-      ],
+      relations: ['entity', 'team', 'departements'],
       select: [
         'id',
         'name',
@@ -295,14 +253,7 @@ export class UsersService {
         status: 'active',
         user_type: META_TYPE.ADMIN,
       },
-      relations: [
-        'entity',
-        'team',
-        'restrictions',
-        'departements',
-        'restrictions.departement',
-        'holidays',
-      ],
+      relations: ['entity', 'team', 'departements'],
       select: [
         'id',
         'name',
@@ -461,14 +412,7 @@ export class UsersService {
       order: {
         createdAt: 'DESC',
       },
-      relations: [
-        'entity',
-        'team',
-        'restrictions',
-        'departements',
-        'restrictions.departement',
-        'holidays',
-      ],
+      relations: ['entity', 'team', 'departements'],
     });
     return users.filter((user) => user.role !== ROLES.SuperAdmin);
   }
