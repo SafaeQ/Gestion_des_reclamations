@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Redirect, Switch } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
@@ -9,30 +9,19 @@ import Authinit from "../containers/Auth/Authinit";
 import ProtectedRoute from "../containers/hoc/PrivateRoute";
 import TeamLeaderProtectedRoute from "../containers/hoc/PrivateRoute2";
 import Spinner from "../containers/Spinner";
-import {
-  Chat,
-  Complaints,
-  Holiday,
-  IqueryParams,
-  ROLE,
-  Ticket,
-  User,
-  USER_STATUS,
-} from "../types";
+import { Complaints, ROLE, User, USER_STATUS } from "../types";
 import { Button, Result } from "antd";
 import addNotification from "react-push-notification";
 import { socket } from "../context/socket.provider";
-import { useNotification } from "../util/useNotification";
 import pointBlank from "../sounds/point-blank-589.mp3";
 import ChefProtectedRoute from "../containers/hoc/ChefPrivateRoute";
 import { transport } from "../util/Api";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { BellOutlined } from "@ant-design/icons";
-import inform from "../sounds/youve-been-informed-345.mp3";
 import UpdateComplain from "./pages/Tickets/Complaints/Update";
 
-const Tickets = lazy(async () => await import("./pages/Tickets/Tickets"));
+const Tickets = lazy(async () => await import("./pages/Tickets/Home"));
 const ChatApp = lazy(async () => await import("./pages/Chat"));
 
 enum Scoop {
@@ -60,12 +49,6 @@ const routes = [
     path: "complaints/edit/:id",
     exact: true,
   },
-  // {
-  //   component: UpdateRequest,
-  //   path: "holidays/tech/update/:id",
-  //   exact: true,
-  //   scope: Scoop.ADMIN,
-  // },
 ];
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
@@ -85,57 +68,13 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 }
 
 const App = () => {
-  const [ticketSound] = useSound(pointBlank);
   const [holidaySound] = useSound(pointBlank);
-  const [queryParams, setQueryParams] = useState<IqueryParams | null>(null);
-  const [updateTicket] = useSound(inform);
 
   const isAuthenticated = useSelector<RootState, boolean | undefined>(
     (state) => state.auth.isAuthenticated
   );
   const user = useSelector<RootState, User | undefined>(
     (state) => state.auth.user
-  );
-
-  const makeSound = (ticket: Ticket) => {
-    // depending on user role and condition, we will make sound
-    if (
-      user?.role === "CHEF" &&
-      user?.departements
-        .map((depart) => depart.id)
-        .includes(ticket.departement.id) &&
-      user.access_entity.includes(ticket.entity?.id)
-    ) {
-      ticketSound();
-    } else if (
-      user?.team !== undefined &&
-      user.team.id === ticket.target_team?.id &&
-      user.access_entity.includes(ticket.entity?.id)
-    ) {
-      ticketSound();
-    }
-  };
-  const { data, refetch } = useQuery<{
-    entities: Ticket[];
-    totalCount: number;
-  }>(
-    ["opentickets", queryParams],
-    async () =>
-      await transport
-        .post("/tickets/tech/find", { queryParams })
-        .then((res) => res.data),
-    {
-      enabled: !(queryParams == null),
-      // refetchInterval: 2000,
-      // refetchIntervalInBackground: true,
-      // onSuccess(data) {
-      //   setNewTicketsCount(
-      //     data.entities.filter(
-      //       (t) => t.status === TICKET_STATUS.Open && t.user.id !== user?.id
-      //     ).length
-      //   );
-      // },
-    }
   );
 
   const { data: Complaints } = useQuery<Complaints[]>(
@@ -151,95 +90,7 @@ const App = () => {
       userId: user?.id,
       activity: USER_STATUS.ONLINE,
     });
-    socket.on("received:message", async (message: Chat) => {
-      if (message.to.id === user?.id) {
-        toast(`You have a New Message`, {
-          icon: <BellOutlined style={{ color: "red" }} />,
-          position: "top-right",
-        });
-        addNotification({
-          title: "Ticketings.org",
-          message: `You have a New Message`,
-          theme: "darkblue",
-          duration: 20000000,
-          native: true, // when using native, your OS will handle theming.
-        });
-      }
-    });
-    socket.on("ticket-created", async (ticket: Ticket) => {
-      makeSound(ticket);
-      useNotification(user, ticket, `You have a New Ticket (#${ticket.id})`);
-    });
-    socket.on("ticket-forwarded", async (ticket: Ticket) => {
-      makeSound(ticket);
-      useNotification(
-        user,
-        ticket,
-        `You have a New Forwarded Ticket (#${ticket.id})`
-      );
-    });
-    if (data != null) {
-      for (const ticket of data.entities) {
-        socket.on(`ticket-updated-${ticket.id}`, async (status: string) => {
-          toast(`Ticket ${ticket.id} is ${status}`, {
-            position: "top-right",
-            autoClose: 2000,
-            progress: 1,
-            icon: <BellOutlined style={{ color: "red" }} />,
-          });
-          updateTicket();
-          await refetch();
-        });
-        socket.on(`messageCreated-${ticket.id}`, async () => {
-          useNotification(
-            user,
-            ticket,
-            `You have a New Message (#${ticket.id})`
-          );
-        });
-      }
-    }
-    if (user?.role !== undefined) {
-      let filter: IqueryParams["filter"] = {};
-      if (user?.role === "TEAMMEMBER") {
-        filter = {
-          target_team: {
-            id: user.team?.id,
-          },
-          user: {
-            id: user.id,
-          },
-        };
-      } else if (user?.role === "TEAMLEADER") {
-        filter = {
-          target_team: ["id", user.access_team],
-          user: {
-            id: user?.id,
-          },
-        };
-      } else if (user?.role === "CHEF") {
-        filter = {
-          departement: ["id", user.departements.map((depart) => depart.id)],
-          user: {
-            id: user.id,
-          },
-        };
-      }
-      const defaultParams = {
-        access_entity: user?.access_entity ?? [],
-        access_team: user?.access_team ?? [],
-        assigned_to: ["TEAMLEADER", "CHEF"].includes(user.role)
-          ? null
-          : user.id,
-        filter,
-        pageNumber: 1,
-        pageSize: 10,
-        read: user?.id ?? 0,
-        sortField: "updatedAt",
-        sortOrder: "desc",
-      };
-      setQueryParams(defaultParams);
-    }
+
     // ping if user online
     socket.io.on("ping", () => {
       socket.emit("user-online", {
@@ -247,30 +98,6 @@ const App = () => {
         activity: USER_STATUS.ONLINE,
       });
     });
-
-    // notife for chef according to thier entity
-    if (user?.role === ROLE.CHEF) {
-      socket.on(`holiday-created-tech`, async (holiday: Holiday) => {
-        if (user?.entity.id === holiday.user.entity.id) {
-          toast(`You have a New Holiday Request ${holiday.id}`, {
-            icon: <BellOutlined style={{ color: "white" }} />,
-            position: "top-right",
-            theme: "colored",
-            autoClose: 5000,
-            progressStyle: { backgroundColor: "#FEA1A1" },
-            style: { backgroundColor: "#EC7272", color: "#fff" },
-          });
-          addNotification({
-            title: "Holidays",
-            message: `You have a New Holiday Request ${holiday.id}`,
-            theme: "darkblue",
-            duration: 20000000,
-            native: true,
-          });
-          holidaySound();
-        }
-      });
-    }
 
     // notife for complaints is seen
     if (Complaints != null) {
@@ -302,24 +129,13 @@ const App = () => {
     }
 
     return () => {
-      if (user?.role === ROLE.CHEF) {
-        socket.off(`holiday-created-tech`);
-      }
-      socket.off("ticket-created");
-      socket.off("ticket-forwarded");
-      socket.off("received:message");
-      if (data != null) {
-        for (const ticket of data.entities) {
-          socket.off(`messageCreated-${ticket.id}`);
-        }
-      }
       if (Complaints != null) {
         for (const complaint of Complaints) {
           socket.off(`complainSeen-tech-${complaint.user.id}-${complaint.id}`);
         }
       }
     };
-  }, [socket, data]);
+  }, [socket]);
 
   return (
     <div>
@@ -366,7 +182,7 @@ const App = () => {
             </ErrorBoundary>
           </Authinit>
         </Suspense>
-        <Redirect from="/" to="/tickets" />
+        <Redirect from="/" to="/complaint" />
       </Switch>
     </div>
   );

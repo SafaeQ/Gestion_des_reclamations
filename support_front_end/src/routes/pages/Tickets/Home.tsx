@@ -17,7 +17,7 @@ dayjs.extend(timezone);
 dayjs.extend(utc);
 dayjs().tz("Africa/Casablanca");
 
-const Tickets = () => {
+const Home = () => {
   const user = useSelector<RootState, User | undefined>(
     (state) => state.auth.user
   );
@@ -94,4 +94,4 @@ const Tickets = () => {
   );
 };
 
-export default Tickets;
+export default Home;
