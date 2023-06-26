@@ -15,9 +15,11 @@ dayjs.extend(utc);
 dayjs().tz("Africa/Casablanca");
 
 const Home = () => {
-  const { data: Complaints, isLoading: isLoadingComplaint } = useQuery<
-    Complaints[]
-  >(
+  const {
+    data: Complaints,
+    isLoading: isLoadingComplaint,
+    refetch,
+  } = useQuery<Complaints[]>(
     "Complaints",
     async () => await transport.get("/complaints").then((res) => res.data)
   );
@@ -44,7 +46,11 @@ const Home = () => {
       ),
       key: "7",
       children: (
-        <Complaint Complaints={Complaints} isLoading={isLoadingComplaint} />
+        <Complaint
+          Complaints={Complaints}
+          isLoading={isLoadingComplaint}
+          refetch={refetch}
+        />
       ),
     },
   ];
