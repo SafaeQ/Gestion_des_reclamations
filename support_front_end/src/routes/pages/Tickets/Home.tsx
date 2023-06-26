@@ -1,5 +1,5 @@
 import { AuditOutlined, DiffOutlined } from "@ant-design/icons";
-import { Button, Card, Badge, Tabs } from "antd";
+import { Button, Card, Badge, Tabs, Progress } from "antd";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
@@ -22,6 +22,7 @@ const Home = () => {
     (state) => state.auth.user
   );
   const [openModel, setOpenModel] = useState(false);
+  // const [unseen, setUnseen] = useState(0);
 
   const {
     data: Complaints,
@@ -34,6 +35,21 @@ const Home = () => {
         .post("/complaints/chef", { id: user?.id })
         .then((res) => res.data)
   );
+
+  // const totalSeenMessages = Complaints?.filter(
+  //   (complaint) => complaint.seen
+  // ).length;
+  // const totalUseenMessages = Complaints?.filter(
+  //   (complaint) => !complaint.seen
+  // ).length;
+  // console.log(totalUseenMessages);
+
+  const totalMessages = Complaints?.length ?? 0;
+  const totalSeenMessages =
+    Complaints?.filter((complaint) => complaint.seen).length ?? 0;
+
+  const seenMessagesPercentage =
+    totalMessages > 0 ? (totalSeenMessages / totalMessages) * 100 : 0;
 
   const items: Tab[] = [
     {
@@ -72,6 +88,16 @@ const Home = () => {
             )}
           </div>,
         ]}
+        title={
+          <>
+            <Progress
+              key={2}
+              percent={Math.floor(seenMessagesPercentage)}
+              style={{ width: "50%" }}
+              status="active"
+            />
+          </>
+        }
       >
         {openModel && (
           <CreateComplaint
