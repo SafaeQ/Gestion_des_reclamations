@@ -22,7 +22,6 @@ const Home = () => {
     (state) => state.auth.user
   );
   const [openModel, setOpenModel] = useState(false);
-  // const [unseen, setUnseen] = useState(0);
 
   const {
     data: Complaints,
@@ -35,14 +34,6 @@ const Home = () => {
         .post("/complaints/chef", { id: user?.id })
         .then((res) => res.data)
   );
-
-  // const totalSeenMessages = Complaints?.filter(
-  //   (complaint) => complaint.seen
-  // ).length;
-  // const totalUseenMessages = Complaints?.filter(
-  //   (complaint) => !complaint.seen
-  // ).length;
-  // console.log(totalUseenMessages);
 
   const totalMessages = Complaints?.length ?? 0;
   const totalSeenMessages =
