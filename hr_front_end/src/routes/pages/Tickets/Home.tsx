@@ -9,6 +9,7 @@ import utc from "dayjs/plugin/utc";
 import { Tab } from "rc-tabs/lib/interface";
 import "../../../assets/style/styling.css";
 import Complaint from "./Complaints/Complaint";
+import { useEffect } from "react";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -54,6 +55,10 @@ const Home = () => {
       ),
     },
   ];
+
+  useEffect(() => {
+    refetch();
+  }, [Complaints]);
 
   return (
     <div className="container-tickets">

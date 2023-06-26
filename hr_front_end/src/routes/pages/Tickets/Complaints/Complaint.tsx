@@ -1,18 +1,28 @@
 import { Button, Popover, Table } from "antd";
-import { useMutation } from "react-query";
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+  useMutation,
+} from "react-query";
 import { Complaints } from "../../../../types";
 import { transport } from "../../../../util/Api";
 import { ColumnProps } from "antd/es/table";
 import dayjs from "dayjs";
 import { CommentOutlined } from "@ant-design/icons";
 import { socket } from "../../../../context/socket.provider";
+import { useEffect } from "react";
 
 const Complaint = ({
   Complaints,
   isLoading,
+  refetch,
 }: {
   Complaints: Complaints[] | undefined;
   isLoading: boolean;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+  ) => Promise<QueryObserverResult<Complaints[], unknown>>;
 }) => {
   const markComplaintAsSeen = useMutation<any, Complaints, number>(
     async (id) => {
@@ -85,6 +95,10 @@ const Complaint = ({
       },
     },
   ];
+
+  useEffect(() => {
+    refetch();
+  }, [Complaints]);
 
   return (
     <div>
