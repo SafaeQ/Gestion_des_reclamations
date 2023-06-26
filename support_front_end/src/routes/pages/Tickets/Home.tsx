@@ -1,5 +1,5 @@
 import { AuditOutlined, DiffOutlined } from "@ant-design/icons";
-import { Button, Card, Badge, Tabs, Progress } from "antd";
+import { Button, Card, Badge, Tabs, Progress, Tooltip } from "antd";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
@@ -89,14 +89,14 @@ const Home = () => {
           </div>,
         ]}
         title={
-          <>
+          <Tooltip title="Complaints has been seen">
             <Progress
               key={2}
               percent={Math.floor(seenMessagesPercentage)}
               style={{ width: "50%" }}
               status="active"
             />
-          </>
+          </Tooltip>
         }
       >
         {openModel && (
