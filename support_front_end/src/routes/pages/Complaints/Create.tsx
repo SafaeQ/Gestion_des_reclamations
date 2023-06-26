@@ -6,11 +6,11 @@ import {
   useMutation,
   useQueryClient,
 } from "react-query";
-import { transport } from "../../../../util/Api";
-import { Complaints, User } from "../../../../types";
-import { RootState } from "../../../../appRedux/store";
+import { transport } from "../../../util/Api";
+import { Complaints, User } from "../../../types";
+import { RootState } from "../../../appRedux/store";
 import { useSelector } from "react-redux";
-import { socket } from "../../../../context/socket.provider";
+import { socket } from "../../../context/socket.provider";
 
 interface CreateComplaintProps {
   isOpen: boolean;

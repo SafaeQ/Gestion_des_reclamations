@@ -1,9 +1,9 @@
 import { Button, Card, Form, Input, message } from "antd";
 import React, { useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
-import { transport } from "../../../../util/Api";
-import { Complaints, User } from "../../../../types";
-import { RootState } from "../../../../appRedux/store";
+import { transport } from "../../../util/Api";
+import { Complaints, User } from "../../../types";
+import { RootState } from "../../../appRedux/store";
 import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import "../../../../assets/style/styling.css";

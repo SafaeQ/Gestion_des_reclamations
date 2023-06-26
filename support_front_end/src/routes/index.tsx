@@ -19,10 +19,9 @@ import { transport } from "../util/Api";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { BellOutlined } from "@ant-design/icons";
-import UpdateComplain from "./pages/Tickets/Complaints/Update";
+import UpdateComplain from "./pages/Complaints/Update";
 
-const Tickets = lazy(async () => await import("./pages/Tickets/Home"));
-const ChatApp = lazy(async () => await import("./pages/Chat"));
+const Tickets = lazy(async () => await import("./pages/Home"));
 
 enum Scoop {
   MEMBER = "member",
@@ -34,15 +33,9 @@ enum Scoop {
 const routes = [
   {
     component: Tickets,
-    path: "tickets",
+    path: "complaint",
     exact: true,
     scope: Scoop.MEMBER,
-  },
-  {
-    component: ChatApp,
-    path: "chats",
-    exact: true,
-    scope: Scoop.LEADER,
   },
   {
     component: UpdateComplain,
