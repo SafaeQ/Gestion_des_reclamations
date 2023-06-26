@@ -1,5 +1,5 @@
 import { AuditOutlined } from "@ant-design/icons";
-import { Card, Badge, Tabs } from "antd";
+import { Card, Badge, Tabs, Tooltip, Progress } from "antd";
 import { useQuery } from "react-query";
 import { Complaints } from "../../../types";
 import { transport } from "../../../util/Api";
@@ -21,6 +21,13 @@ const Home = () => {
     "Complaints",
     async () => await transport.get("/complaints").then((res) => res.data)
   );
+
+  const totalMessages = Complaints?.length ?? 0;
+  const totalSeenMessages =
+    Complaints?.filter((complaint) => complaint.seen).length ?? 0;
+
+  const seenMessagesPercentage =
+    totalMessages > 0 ? (totalSeenMessages / totalMessages) * 100 : 0;
 
   const items: Tab[] = [
     {
@@ -44,7 +51,18 @@ const Home = () => {
 
   return (
     <div className="container-tickets">
-      <Card>
+      <Card
+        title={
+          <Tooltip title="Complaints has been seen">
+            <Progress
+              key={2}
+              percent={Math.floor(seenMessagesPercentage)}
+              style={{ width: "50%" }}
+              status="active"
+            />
+          </Tooltip>
+        }
+      >
         <Tabs
           centered
           tabPosition="left"
