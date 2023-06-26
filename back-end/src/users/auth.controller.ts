@@ -18,9 +18,7 @@ import { GlobalGuard } from 'guards/global.guard';
 
 @Controller('api/auth/users')
 export class AuthUserController {
-  constructor(
-    private readonly userService: UsersService,
-  ) {}
+  constructor(private readonly userService: UsersService) {}
 
   // get current logged in user by it's jwt
   @Get('admin/me')
@@ -262,7 +260,6 @@ export class AuthUserController {
       if (!user) {
         return res.status(403).json({ message: 'Username Do Not Exist' });
       }
-      console.log(user);
       const valid = await compare(password, user.password);
       if (!valid) {
         return res.status(403).json({ message: 'Password not Correct' });
@@ -405,8 +402,6 @@ export class AuthUserController {
       });
       return res.status(200).json({ result: true, user });
     } catch (error) {
-      console.log(error);
-      
       return res.status(403).json({ message: error.message });
     }
   }
